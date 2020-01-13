@@ -1,0 +1,16 @@
+﻿@page "/calendrier"
+@using System.Globalization;
+@using LibrairieDeComposants;
+
+
+<LibrairieDeComposants.Calendrier.Calendrier DateFormat="@DateFormat" CultureName="@CultureName"></LibrairieDeComposants.Calendrier.Calendrier>
+
+
+
+@code {
+    public String DateFormat = "dddd, d-MMM-yy ";
+    public String CultureName = "fr-FR";
+
+    //public String DateFormat = "MMM-d-yy ";
+    //public String CultureName = "en-US";
+}

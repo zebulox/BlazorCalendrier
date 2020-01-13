@@ -1,0 +1,46 @@
+﻿/*
+    This file is to show how CSS and other static resources (such as images) can be
+    used from a library project/package.
+*/
+
+/*CSS Calendrier*/
+
+.align-bas {
+    position: absolute;
+    bottom: 0 !important;
+    right: 0 !important;
+}
+
+.jour {
+    background-color: whitesmoke;
+}
+
+    .jour:hover {
+        background-color: darkgrey;
+        /*border: 1px solid dimgrey;*/
+    }
+
+.jour-dark {
+    background-color: rgb(143, 143, 143);
+    color: #6c757d;
+}
+
+.jour-petit {
+    height: 100px;
+}
+
+.jour-moyen {
+    height: 150px;
+}
+
+.jour-grand {
+    height: 200px;
+}
+
+.inverse {
+    filter: invert(1);
+}
+
+.note{
+    background-color : rgb(138, 138, 138);
+}

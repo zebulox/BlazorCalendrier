@@ -1,0 +1,12 @@
+﻿@using Models;
+<div class="row">
+    @foreach (var jour in semaine.Jours)
+    {
+        <JourComposant jour="jour" OnAfficheModalNote="OnAfficheModalNote"></JourComposant>
+    }
+</div>
+
+@code {
+    [Parameter] public SemaineModel semaine { get; set; }
+    [Parameter] public EventCallback<JourModels> OnAfficheModalNote { get; set; }
+}
