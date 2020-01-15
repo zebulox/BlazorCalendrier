@@ -25,23 +25,24 @@ namespace LibrairieDeComposants.Calendrier.Services
 
         public async void EnregistrerNote(JourModels jour)
         {
+            if (jour.Notes.Count < 1) return;
+
             try
             {
-                await _localStore.SetItemAsync(jour.Jour.ToString(), jour.Notes[0]);
+                await _localStore.SetItemAsync(jour.Jour.ToString(), jour.Notes[jour.Notes.Count -1]);
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-                throw;
             }
         }
 
         //TODO la faire async entièrement
-        List<NotePersistanceModel> IEnregistrerNote.ChargerNotes(DateTime dateDebut, DateTime dateFin)
+        public List<NoteViewModel> ChargerNotes(DateTime dateDebut, DateTime dateFin)
         {
             try
             {
-                List<NotePersistanceModel> Notes = new List<NotePersistanceModel>();
+                List<NoteViewModel> Notes = new List<NoteViewModel>();
 
                 while (dateDebut <= dateFin)
                 {
@@ -49,7 +50,7 @@ namespace LibrairieDeComposants.Calendrier.Services
 
                     if (!String.IsNullOrWhiteSpace(note))
                     {
-                        NotePersistanceModel noteModel = new NotePersistanceModel() { Date = dateDebut, Note = note };
+                        NoteViewModel noteModel = new NoteViewModel() { Date = dateDebut, Note = note };
                         Notes.Add(noteModel);
                     }
                     dateDebut = dateDebut.AddDays(1);
@@ -59,7 +60,7 @@ namespace LibrairieDeComposants.Calendrier.Services
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-                throw;
+                return new List<NoteViewModel>();
             }
         }
 

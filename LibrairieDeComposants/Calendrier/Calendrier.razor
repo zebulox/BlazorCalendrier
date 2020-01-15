@@ -2,9 +2,15 @@
 @using Models;
 @using Microsoft.JSInterop;
 @using LibrairieDeComposants.Calendrier.Services;
+@using System.Net.Http;
+@using DAL;
+
+
 @inject IJSRuntime JSRuntime
 @inject CalendrierStateManager EtatCalendrier
-@inject Blazored.LocalStorage.ILocalStorageService _localStore
+@inject CalendrierContext calendrierContext
+@*@inject HttpClient HttpClient*@
+@*@inject Blazored.LocalStorage.ILocalStorageService _localStore*@
 
 <div class="container">
 
@@ -73,8 +79,8 @@
 
 
 @code {
-    [Parameter] public String DateFormat { get; set; }
-    [Parameter] public String CultureName { get; set; }
+    [Parameter] public String FormatDate { get; set; }
+    [Parameter] public String NomCulture { get; set; }
 
 
     private IEnumerable<KeyValuePair<int, string>> mois;
@@ -84,10 +90,10 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        EtatCalendrier.UseCulture(CultureName);
-        EtatCalendrier.UseDateFormat(DateFormat);
+        EtatCalendrier.UseCulture(NomCulture);
+        EtatCalendrier.UseDateFormat(FormatDate);
         EtatCalendrier.MoisSelectione = DateTime.Now.Month;
-        ChargerNotes();
+
         var dateFormatInfo = EtatCalendrier.Culture.DateTimeFormat;
         mois = Enumerable.Range(1, 12).Select(i => new KeyValuePair<int, string>(i, dateFormatInfo.GetMonthName(i)));
 
@@ -115,20 +121,22 @@
     void AjouterNote()
     {
         EtatCalendrier.JourSelectionne.AjouterNote(note);
-        EnregistrerNote();
         JSRuntime.InvokeVoidAsync("fermerModal");
         note = String.Empty;
     }
 
+
+    private String _apiPath = "api/Notes";
+
     public void EnregistrerNote()
     {
-        IEnregistrerNote localStore = new LocalStorage(_localStore);
-        localStore.EnregistrerNote(EtatCalendrier.JourSelectionne);
+        //IEnregistrerNote localStore = new WebServiceStorage(HttpClient, _apiPath);
+        //localStore.EnregistrerNote(EtatCalendrier.JourSelectionne);
     }
 
     public void ChargerNotes()
     {
-        IEnregistrerNote localStore = new LocalStorage(_localStore);
+        //IEnregistrerNote localStore = new WebServiceStorage(HttpClient, _apiPath);
 
         DateTime datedebut = (EtatCalendrier.Calendrier.Semaines.ElementAt(0)?.Jours.ElementAt(0)?.Jour).Value;
         DateTime dateFin = (EtatCalendrier.Calendrier.Semaines.FindLast(x => true)?.Jours.FindLast(x => true).Jour).Value;
@@ -138,13 +146,23 @@
             return;
         }
 
-        List<NotePersistanceModel> NotesBrutes = localStore.ChargerNotes(datedebut, dateFin);
+        //List<NotePersistanceModel> NotesBrutes = localStore.ChargerNotes(datedebut, dateFin);
 
-        foreach (NotePersistanceModel NoteBrute in NotesBrutes)
+        List<Note> notes = calendrierContext.Notes.Where(x => true).ToList();
+
+        List<NoteViewModel> NotesBrutes = new List<NoteViewModel>();
+        foreach (var item in notes)
+        {
+            NotesBrutes.Add(new NoteViewModel() { Date = item.Date, Note = item.Message });
+        }
+
+        foreach (NoteViewModel NoteBrute in NotesBrutes)
         {
             foreach (var semaine in EtatCalendrier.Calendrier.Semaines)
             {
-                JourModels jour = semaine.Jours.Find(j => j.Jour == NoteBrute.Date);
+                JourModels jour = semaine.Jours.Find(j => j.Jour.Year == NoteBrute.Date.Year
+                                                        && j.Jour.Month == NoteBrute.Date.Month
+                                                        &&j.Jour.Day == NoteBrute.Date.Day);
 
                 if (jour != null)
                 {

@@ -3,14 +3,14 @@
 @using LibrairieDeComposants;
 
 
-<LibrairieDeComposants.Calendrier.Calendrier DateFormat="@DateFormat" CultureName="@CultureName"></LibrairieDeComposants.Calendrier.Calendrier>
+<LibrairieDeComposants.Calendrier.Calendrier FormatDate="@FormatDate" NomCulture="@NomCulture"></LibrairieDeComposants.Calendrier.Calendrier>
 
 
 
 @code {
-    public String DateFormat = "dddd, d-MMM-yy ";
-    public String CultureName = "fr-FR";
+    public String FormatDate = "dddd, d-MMM-yy ";
+    public String NomCulture = "fr-FR";
 
-    //public String DateFormat = "MMM-d-yy ";
-    //public String CultureName = "en-US";
+    //public String FormatDate = "MMM-d-yy ";
+    //public String NomCulture = "en-US";
 }
