@@ -5161,11 +5161,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Calendrier\\Calendrier.csproj",
+      "projectUniqueName": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Calendrier\\Calendrier.csproj",
       "projectName": "Calendrier",
-      "projectPath": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Calendrier\\Calendrier.csproj",
+      "projectPath": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Calendrier\\Calendrier.csproj",
       "packagesPath": "C:\\Users\\Hadrien\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Calendrier\\obj\\",
+      "outputPath": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Calendrier\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Hadrien\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5181,11 +5181,11 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Data\\Data.csproj": {
-              "projectPath": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Data\\Data.csproj"
+            "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Data\\Data.csproj": {
+              "projectPath": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Data\\Data.csproj"
             },
-            "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\LibrairieDeComposants\\LibrairieDeComposants.csproj": {
-              "projectPath": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\LibrairieDeComposants\\LibrairieDeComposants.csproj"
+            "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\LibrairieDeComposants\\LibrairieDeComposants.csproj": {
+              "projectPath": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\LibrairieDeComposants\\LibrairieDeComposants.csproj"
             }
           }
         }

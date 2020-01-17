@@ -6177,11 +6177,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Data\\Data.csproj",
+      "projectUniqueName": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Data\\Data.csproj",
       "projectName": "Data",
-      "projectPath": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Data\\Data.csproj",
+      "projectPath": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Data\\Data.csproj",
       "packagesPath": "C:\\Users\\Hadrien\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Hadrien\\source\\repos\\Calendrier\\Data\\obj\\",
+      "outputPath": "C:\\Users\\Hadrien\\source\\repos\\BlazorPoc\\BlazorCalendrier\\Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Hadrien\\AppData\\Roaming\\NuGet\\NuGet.Config",

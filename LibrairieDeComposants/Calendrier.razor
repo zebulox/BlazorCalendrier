@@ -53,10 +53,60 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1"> <span class="material-icons">edit</span> Note :</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind="noteVm.Note"></textarea>
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Ecrire une note
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1"> <span class="material-icons">edit</span> Note :</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind="noteVm.Note"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Voir les notes
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                <div class="card-body">
+
+                                    <div class="row">
+                                        @foreach (var note in EtatCalendrier.JourSelectionne.Notes)
+                                        {
+                                            <div class="col-sm-6">
+
+                                                <div class="card" style="width: 100%;">
+                                                    <img class="card-img-top" src="/_content/LibrairieDeComposants/Images/user.svg" alt="Card image cap">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Note de : </h5>
+                                                        <p class="card-text">@(note.Note)</p>
+                                                        <a href="#">@(note.Date.ToString(EtatCalendrier.DateFormat, EtatCalendrier.Culture))</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
                 <!-- Modal footer -->
