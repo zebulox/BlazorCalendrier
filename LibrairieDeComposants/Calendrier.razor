@@ -1,0 +1,132 @@
+﻿@using Microsoft.JSInterop;
+@using Data.Dal
+
+@inject IJSRuntime JSRuntime
+@inject CalendrierStateManager EtatCalendrier
+@inject CalendrierContext calendrierContext
+@*@inject HttpClient HttpClient*@
+@*@inject Blazored.LocalStorage.ILocalStorageService _localStore*@
+
+<div class="container">
+
+    <div class="row justify-content-md-center">
+        <div class="col-sm text-sm-right">
+            <button class="btn btn-secondary" type="button" @onclick="ReculeUnMois"><span class="material-icons">fast_rewind</span></button>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <select id="mois" class="form-control" @bind="EtatCalendrier.MoisSelectione">
+                    @foreach (var m in mois)
+                    {
+                        if (m.Key == EtatCalendrier.MoisSelectione)
+                        {
+                            <option value="@(m.Key)" selected>@(m.Value)</option>
+                        }
+                        else
+                        {
+                            <option value="@(m.Key)">@(m.Value)</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-sm">
+            <button class="btn btn-secondary" type="button" @onclick="AvanceUnMois"><span class="material-icons">fast_forward</span></button>
+        </div>
+    </div>
+
+    @foreach (var semaine in EtatCalendrier.Calendrier.Semaines)
+    {
+        <Semaine semaine="semaine" OnAfficheModalNote="OnAfficheModalNote"></Semaine>
+    }
+
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ajouter une note le @EtatCalendrier.JourSelectionne.Jour.ToString(EtatCalendrier.DateFormat, EtatCalendrier.Culture)</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1"> <span class="material-icons">edit</span> Note :</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind="noteVm.Note"></textarea>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-dark" @onclick="AjouterNote">Ajouter : <span class="material-icons">done_outline</span></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@code {
+    [Parameter] public String FormatDate { get; set; }
+    [Parameter] public String NomCulture { get; set; }
+
+
+    private IEnumerable<KeyValuePair<int, string>> mois;
+    private NoteViewModel noteVm;
+
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        EtatCalendrier.InitDataAccess(calendrierContext);
+        EtatCalendrier.UseCulture(NomCulture);
+        EtatCalendrier.UseDateFormat(FormatDate);
+        EtatCalendrier.MoisSelectione = DateTime.Now.Month;
+
+        var dateFormatInfo = EtatCalendrier.Culture.DateTimeFormat;
+        mois = Enumerable.Range(1, 12).Select(i => new KeyValuePair<int, string>(i, dateFormatInfo.GetMonthName(i)));
+
+        noteVm = new NoteViewModel();
+
+        await base.OnParametersSetAsync();
+    }
+
+    private void ReculeUnMois()
+    {
+        EtatCalendrier.MoisSelectione--;
+    }
+
+    private void AvanceUnMois()
+    {
+        EtatCalendrier.MoisSelectione++;
+    }
+
+    void OnAfficheModalNote(JourModel jour)
+    {
+        EtatCalendrier.JourSelectionne = jour;
+        JSRuntime.InvokeVoidAsync("ouvrirModal");
+    }
+
+    void AjouterNote()
+    {
+        noteVm.Date = EtatCalendrier.JourSelectionne.Jour;
+        //mise à jour de l'interface
+        EtatCalendrier.JourSelectionne.AjouterNote(noteVm);
+        //mise à jour du store
+        EtatCalendrier.EnregistrerNote(noteVm);
+
+        JSRuntime.InvokeVoidAsync("fermerModal");
+        noteVm = new NoteViewModel();
+    }
+
+
+    //private String _apiPath = "api/Notes";
+
+}
