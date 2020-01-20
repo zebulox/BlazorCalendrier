@@ -9,7 +9,7 @@ namespace Data.Services.Interface
     public interface IEnregistrerNote
     {
         Task EnregistrerNoteAsync(Note note);
-
+        Task EffacerNoteAsync(Note note);
         Task<List<Note>> ChargerNotesAsync(DateTime dateDebut, DateTime dateFin);
     }
 }

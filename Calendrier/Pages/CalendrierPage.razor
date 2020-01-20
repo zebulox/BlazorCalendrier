@@ -3,14 +3,40 @@
 @using LibrairieDeComposants;
 @using LibrairieDeComposants.Model;
 
-<Calendrier FormatDate="FormatDate" NomCulture="NomCulture"></Calendrier>
+@inject NavigationManager MyNavigationManager
+@inject CalendrierStateManager EtatCalendrier
+
+
+
+<Calendrier></Calendrier>
 
 
 @code {
-    public String FormatDate = "dddd, d-MMM-yy ";
-    public String NomCulture = "fr-FR";
+    //public String FormatDate = "dddd, d-MMM-yy";
+    //public String FormatDate = "dd/MM/yyyy";
+    //public String NomCulture = "fr-FR";
+
+    public String FormatDate { get; set; }
+    public String NomCulture { get; set; }
+    public String ShortdateFormat { get; set; }
 
     //public String FormatDate = "MMM-d-yy ";
     //public String NomCulture = "en-US";
 
+    protected override async Task OnParametersSetAsync()
+    {
+        NomCulture = "fr-FR";
+        FormatDate = "dddd, d-MMM-yy";
+        ShortdateFormat = "dd/MM/yyyy";
+
+        EtatCalendrier.UseCulture(NomCulture);
+        EtatCalendrier.UseDateFormat(FormatDate);
+        EtatCalendrier.UseShortDateFormat(ShortdateFormat);
+
+        if (EtatCalendrier.CurrentUser == null)
+        {
+            MyNavigationManager.NavigateTo("login");
+        }
+        await base.OnParametersSetAsync();
+    }
 }

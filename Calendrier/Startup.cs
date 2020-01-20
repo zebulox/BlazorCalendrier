@@ -55,6 +55,7 @@ namespace Calendrier
 
             app.UseRouting();
 
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();

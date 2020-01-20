@@ -6,28 +6,35 @@ namespace LibrairieDeComposants.Model
 {
     public class JourModel
     {
+        #region private properties
+
         private DateTime _jour;
+        private String _cssJourClass;
+        private String _cssBadgeClass;
+        private List<NoteViewModel> _notes;
+
+        #endregion
+
+        #region properties
+
         public DateTime Jour
         {
             get { return _jour; }
             set { _jour = value; }
         }
 
-        private String _cssJourClass;
         public String CssJourClass
         {
             get { return _cssJourClass; }
             set { _cssJourClass = value; }
         }
 
-        private String _cssBadgeClass;
         public String CssBadgeClass
         {
             get { return _cssBadgeClass; }
             set { _cssBadgeClass = value; }
         }
 
-        private List<NoteViewModel> _notes;
         public List<NoteViewModel> Notes
         {
             get
@@ -40,9 +47,15 @@ namespace LibrairieDeComposants.Model
             set { _notes = value; }
         }
 
+        #endregion
+
+        #region public functions
+
         public void AjouterNote(NoteViewModel note)
         {
             Notes.Add(note);
         }
+
+        #endregion
     }
 }

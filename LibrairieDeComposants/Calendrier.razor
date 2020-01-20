@@ -1,5 +1,6 @@
 ﻿@using Microsoft.JSInterop;
 @using Data.Dal
+@*@using Data.Models*@
 
 @inject IJSRuntime JSRuntime
 @inject CalendrierStateManager EtatCalendrier
@@ -58,9 +59,19 @@
                             <div class="card-header" id="headingOne">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Ecrire une note
+                                        Ecrire une note pour :
                                     </button>
                                 </h5>
+                                @*<select @bind="noteVm.GroupeID">
+                                    @if (EtatCalendrier.CurrentUser.UtilisateurGroupe != null)
+                                    {
+                                        @foreach (UtilisateurGroupe Ugroupe in EtatCalendrier.CurrentUser.UtilisateurGroupe)
+                                        {
+                                    <option value="@Ugroupe.Groupe.GroupeID">@Ugroupe.Groupe.Nom</option>
+                                        }
+                                    }
+                                    else{<p>EtatCalendrier.CurrentUser.UtilisateurGroupe null</p>}
+                                </select>*@
                             </div>
 
                             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
@@ -70,6 +81,16 @@
                                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind="noteVm.Note"></textarea>
                                     </div>
                                 </div>
+
+                                @if (EtatCalendrier.CurrentUser != null)
+                                {
+                                    <button type="button" class="btn btn-dark float-right mb-5" @onclick="AjouterNote">Ajouter : <span class="material-icons">done_outline</span></button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-dark float-right mb-5" data-toggle="tooltip" data-placement="top" title="Vous devez vous connecter avant de créer une note" disabled>Ajouter : <span class="material-icons">done_outline</span></button>
+                                }
+
                             </div>
                         </div>
                         <div class="card">
@@ -83,24 +104,31 @@
                             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                                 <div class="card-body">
 
-                                    <div class="row">
-                                        @foreach (var note in EtatCalendrier.JourSelectionne.Notes)
-                                        {
-                                            <div class="col-sm-6">
+                                        <div class="card-columns">
+                                            @foreach (var note in EtatCalendrier.JourSelectionne.Notes)
+                                            {
 
                                                 <div class="card" style="width: 100%;">
-                                                    <img class="card-img-top" src="/_content/LibrairieDeComposants/Images/user.svg" alt="Card image cap">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">Note de : </h5>
-                                                        <p class="card-text">@(note.Note)</p>
-                                                        <a href="#">@(note.Date.ToString(EtatCalendrier.DateFormat, EtatCalendrier.Culture))</a>
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">
+                                                            <img src="@(note.CreateurAvatar)" alt="Card image cap"> (@(note.CreateurNom))
+                                                        </h5>
                                                     </div>
+                                                    <div class="card-body">
+                                                        <p class="card-text">@(note.Note)</p>
+                                                        <a href="#">@(note.DateCreationNote.ToString(EtatCalendrier.ShortdateFormat, EtatCalendrier.Culture))</a>
+                                                    </div>
+                                                    @if (EtatCalendrier.CurrentUser.Login == note.CreateurNom)
+                                                    {
+                                                <div class="card-footer">
+                                                    <button type="button" class="btn btn-sm btn-dark float-right mb-2" @onclick="@(e => EffacerNote(note))">
+                                                        <span class="material-icons">delete</span>
+                                                    </button>
                                                 </div>
-
-                                            </div>
-
-                                        }
-                                    </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
 
                                 </div>
                             </div>
@@ -111,8 +139,7 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-dark" @onclick="AjouterNote">Ajouter : <span class="material-icons">done_outline</span></button>
+                    <button type="button" class="btn" data-dismiss="modal">Fermer</button>
                 </div>
 
             </div>
@@ -124,9 +151,6 @@
 
 
 @code {
-    [Parameter] public String FormatDate { get; set; }
-    [Parameter] public String NomCulture { get; set; }
-
 
     private IEnumerable<KeyValuePair<int, string>> mois;
     private NoteViewModel noteVm;
@@ -136,8 +160,6 @@
     protected override async Task OnParametersSetAsync()
     {
         EtatCalendrier.InitDataAccess(calendrierContext);
-        EtatCalendrier.UseCulture(NomCulture);
-        EtatCalendrier.UseDateFormat(FormatDate);
         EtatCalendrier.MoisSelectione = DateTime.Now.Month;
 
         var dateFormatInfo = EtatCalendrier.Culture.DateTimeFormat;
@@ -166,17 +188,25 @@
 
     void AjouterNote()
     {
-        noteVm.Date = EtatCalendrier.JourSelectionne.Jour;
-        //mise à jour de l'interface
-        EtatCalendrier.JourSelectionne.AjouterNote(noteVm);
-        //mise à jour du store
-        EtatCalendrier.EnregistrerNote(noteVm);
+        if (EtatCalendrier.CurrentUser != null)
+        {
+            noteVm.Date = EtatCalendrier.JourSelectionne.Jour;
+            noteVm.CreateurNom = EtatCalendrier.CurrentUser.Login;
+            noteVm.CreateurAvatar = EtatCalendrier.CurrentUser.ProfilImage;
+            noteVm.DateCreationNote = DateTime.Now;
+            //mise à jour de l'interface
+            EtatCalendrier.JourSelectionne.AjouterNote(noteVm);
+            //mise à jour du store
+            EtatCalendrier.EnregistrerNote(noteVm);
 
-        JSRuntime.InvokeVoidAsync("fermerModal");
-        noteVm = new NoteViewModel();
+            JSRuntime.InvokeVoidAsync("fermerModal");
+            noteVm = new NoteViewModel();
+        }
     }
 
-
-    //private String _apiPath = "api/Notes";
+    void EffacerNote(NoteViewModel noteVm)
+    {
+        EtatCalendrier.EffacerNote(noteVm);
+    }
 
 }

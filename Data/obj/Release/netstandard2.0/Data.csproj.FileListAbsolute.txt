@@ -1,0 +1,8 @@
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\bin\Release\netstandard2.0\Data.deps.json
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\bin\Release\netstandard2.0\Data.dll
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\bin\Release\netstandard2.0\Data.pdb
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Release\netstandard2.0\Data.csprojAssemblyReference.cache
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Release\netstandard2.0\Data.AssemblyInfoInputs.cache
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Release\netstandard2.0\Data.AssemblyInfo.cs
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Release\netstandard2.0\Data.dll
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Release\netstandard2.0\Data.pdb

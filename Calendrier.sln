@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calendrier", "Calendrier\Calendrier.csproj", "{CA03E061-0FD8-473E-9A7C-AAA37E100238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{59245C7F-20C1-4F84-B20F-BA81CFB12263}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{59245C7F-20C1-4F84-B20F-BA81CFB12263}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrairieDeComposants", "LibrairieDeComposants\LibrairieDeComposants.csproj", "{D92E5463-2C80-4B4B-8FDA-426148656FEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibrairieDeComposants", "LibrairieDeComposants\LibrairieDeComposants.csproj", "{D92E5463-2C80-4B4B-8FDA-426148656FEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

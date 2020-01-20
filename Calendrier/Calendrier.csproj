@@ -20,4 +20,8 @@
     <ProjectReference Include="..\LibrairieDeComposants\LibrairieDeComposants.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Icons\Avatar\" />
+  </ItemGroup>
+
 </Project>

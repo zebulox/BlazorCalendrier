@@ -14,28 +14,30 @@ namespace LibrairieDeComposants
 {
     public class CalendrierStateManager
     {
-        public String DateFormat { get; private set; }
-        public CultureInfo Culture { get; private set; }
+        #region private properties
 
-        private DateTime _dateReference = DateTime.Now;
-        public DateTime DateReference { get { return _dateReference; } private set { _dateReference = value; } }
-
-
+        private ICalendrierDataAccessLayer _calendrierContext;
+        private IEnregistrerNote _dataservice;
         private CalendrierModel _calendrier;
-        public CalendrierModel Calendrier
-        {
-            get
-            {
-                if (_calendrier == null)
-                {
-                    _calendrier = new CalendrierModel();
-                }
-                return _calendrier;
-            }
-            set { _calendrier = value; }
-        }
-
         private int _moisSelectione;
+        private DateTime _dateReference = DateTime.Now;
+        private JourModel _jourSelectionne;
+        private Utilisateur _currentUser;
+
+        #endregion
+
+        #region constructor
+
+
+
+        #endregion
+
+        #region properties
+
+        public String DateFormat { get; private set; }
+        public String ShortdateFormat { get; private set; }
+        public CultureInfo Culture { get; private set; }
+        public DateTime DateReference { get { return _dateReference; } private set { _dateReference = value; } }
         public int MoisSelectione
         {
             get => _moisSelectione;
@@ -60,8 +62,6 @@ namespace LibrairieDeComposants
                 initialiseCalendrier(DateReference);
             }
         }
-
-        private JourModel _jourSelectionne;
         public JourModel JourSelectionne
         {
             get
@@ -74,9 +74,23 @@ namespace LibrairieDeComposants
             }
             set { _jourSelectionne = value; }
         }
+        public Utilisateur CurrentUser { get { return _currentUser; } set { _currentUser = value; } }
+        public CalendrierModel Calendrier
+        {
+            get
+            {
+                if (_calendrier == null)
+                {
+                    _calendrier = new CalendrierModel();
+                }
+                return _calendrier;
+            }
+            set { _calendrier = value; }
+        }
 
-        private ICalendrierDataAccessLayer _calendrierContext;
-        private IEnregistrerNote _dataservice;
+        #endregion
+
+        #region public functions
 
         public void InitDataAccess(ICalendrierDataAccessLayer calendrierContext)
         {
@@ -104,19 +118,71 @@ namespace LibrairieDeComposants
 
         public void UseDateFormat(String dateFormat)
         {
-            try
+            DateFormat = "";
+            if (IsValiddateFormat(dateFormat))
             {
-                String formattedDate = DateTime.Now.ToString(dateFormat);
-                DateTime.Parse(formattedDate);
                 DateFormat = dateFormat;
-            }
-            catch (Exception)
-            {
-                DateFormat = "";
             }
         }
 
+        public void UseShortDateFormat(String shortdateFormat)
+        {
+            ShortdateFormat = "";
+            if (IsValiddateFormat(shortdateFormat))
+            {
+                ShortdateFormat = shortdateFormat;
+            }
+        }
 
+        public void EnregistrerNote(NoteViewModel noteViewModel)
+        {
+            _dataservice.EnregistrerNoteAsync(new Note() { Date = noteViewModel.Date, 
+                                                           Message = noteViewModel.Note, 
+                                                           UtilsateurCreateur = CurrentUser, 
+                                                           DateCreationNote = noteViewModel.DateCreationNote });
+        }
+
+        public void EffacerNote(NoteViewModel noteVm)
+        {
+            JourModel jour = TrouverJourDansCalendrier(noteVm.Date);
+            jour.Notes.Remove(noteVm);
+
+
+            _dataservice.EffacerNoteAsync(new Note() { NoteID = noteVm.NoteId});
+
+        }
+
+        public void ChargerNotes()
+        {
+            DateTime dateDebut = Calendrier.Semaines.ElementAt(0).Jours.ElementAt(0).Jour;
+            int nbjours = 0;
+            foreach (SemaineModel semaine in Calendrier.Semaines)
+            {
+                nbjours += semaine.Jours.Count();
+            }
+
+            DateTime dateFin = dateDebut.AddDays(nbjours);
+            List<Note> notes = _dataservice.ChargerNotesAsync(dateDebut, dateFin).Result;
+
+            foreach (Note note in notes)
+            {
+                JourModel jour = TrouverJourDansCalendrier(note.Date);
+                jour.Notes.Add(new NoteViewModel()
+                {
+                    Note = note.Message,
+                    Date = jour.Jour,
+                    CreateurNom = note.UtilsateurCreateur.Login,
+                    CreateurAvatar = note.UtilsateurCreateur.ProfilImage,
+                    DateCreationNote = note.DateCreationNote,
+                    NoteId = note.NoteID,
+                    GroupeID = note.Groupe
+                });
+            }
+        }
+
+        #endregion
+
+        #region private functions
         private static bool CultureExists(string name)
         {
             return new List<CultureInfo>(CultureInfo.GetCultures(CultureTypes.AllCultures)).Any(e => e.Name.Equals(name));
@@ -148,35 +214,6 @@ namespace LibrairieDeComposants
             ChargerNotes();
         }
 
-
-        public void EnregistrerNote(NoteViewModel noteViewModel)
-        {
-            _dataservice.EnregistrerNoteAsync(new Note() { Date = noteViewModel.Date, Message = noteViewModel.Note });
-        }
-
-        public void ChargerNotes()
-        {
-            DateTime dateDebut = Calendrier.Semaines.ElementAt(0).Jours.ElementAt(0).Jour;
-            int nbjours = 0;
-            foreach (SemaineModel semaine in Calendrier.Semaines)
-            {
-                nbjours += semaine.Jours.Count();
-            }
-
-            DateTime dateFin = dateDebut.AddDays(nbjours);
-            List<Note> notes = _dataservice.ChargerNotesAsync(dateDebut, dateFin).Result;
-
-            foreach (Note note in notes)
-            {
-                JourModel jour = TrouverJourDansCalendrier(note.Date);
-                jour.Notes.Add(new NoteViewModel()
-                {
-                    Note = note.Message,
-                    Date = jour.Jour
-                });
-            }
-        }
-
         private JourModel TrouverJourDansCalendrier(DateTime date)
         {
             JourModel jour = null;
@@ -192,6 +229,22 @@ namespace LibrairieDeComposants
 
             return jour;
         }
+
+        private bool IsValiddateFormat(String dateFormat)
+        {
+            try
+            {
+                String formattedDate = DateTime.Now.ToString(dateFormat);
+                DateTime.Parse(formattedDate);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        #endregion
 
     }
 }

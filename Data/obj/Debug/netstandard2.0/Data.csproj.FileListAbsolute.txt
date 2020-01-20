@@ -6,3 +6,10 @@ C:\Users\Hadrien\source\repos\Calendrier\Data\obj\Debug\netstandard2.0\Data.Asse
 C:\Users\Hadrien\source\repos\Calendrier\Data\bin\Debug\netstandard2.0\Data.pdb
 C:\Users\Hadrien\source\repos\Calendrier\Data\obj\Debug\netstandard2.0\Data.dll
 C:\Users\Hadrien\source\repos\Calendrier\Data\obj\Debug\netstandard2.0\Data.pdb
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\bin\Debug\netstandard2.0\Data.deps.json
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\bin\Debug\netstandard2.0\Data.dll
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\bin\Debug\netstandard2.0\Data.pdb
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Debug\netstandard2.0\Data.AssemblyInfoInputs.cache
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Debug\netstandard2.0\Data.AssemblyInfo.cs
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Debug\netstandard2.0\Data.dll
+C:\Users\Hadrien\source\repos\BlazorPoc\BlazorCalendrier\Data\obj\Debug\netstandard2.0\Data.pdb

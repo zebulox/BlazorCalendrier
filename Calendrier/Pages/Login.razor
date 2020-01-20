@@ -1,0 +1,119 @@
+﻿@page "/login"
+@using Data.Models;
+@using Data.Services;
+@using Data.Dal;
+@using LibrairieDeComposants;
+
+@inject NavigationManager MyNavigationManager
+@inject CalendrierContext calendrierContext
+@inject CalendrierStateManager EtatCalendrier
+
+
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="loginInput">Login</label>
+                <input type="text" class="form-control @(formInvalid)" id="loginInput" placeholder="Entrer Login" @bind="UserLogin">
+                @if (!erreurConnexion && !erreurCreationCompte)
+                {
+                    <small id="emailHelp" class="form-text text-muted">Qui es tu ?</small>
+                }
+                @if (erreurConnexion)
+                {
+                    <div class="invalid-feedback">
+                        Login ou mot de passe incorrect
+                    </div>
+                }
+                @if (erreurCreationCompte)
+                {
+                    <div class="invalid-feedback">
+                        Ce Login est déja pris
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label for="motDePasseInput">Mot de passe</label>
+                <input type="password" class="form-control" id="motDePasseInput" placeholder="Mot de passe" @bind="UserMotDePasse">
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" @bind="CreateAccount">
+                <label class="form-check-label" for="exampleCheck1">Créer un Compte</label>
+            </div>
+            <button type="submit" class="btn btn-secondary" @onclick="LogUser">Se connecter</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    public String UserLogin { get; set; }
+    public String UserMotDePasse { get; set; }
+    public bool CreateAccount { get; set; }
+
+    //is-invalid
+    private String formInvalid;
+    private bool erreurConnexion;
+    private bool erreurCreationCompte;
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        AfficheErreurConnexion(false);
+        AfficheErreurCreation(false);
+
+        await base.OnParametersSetAsync();
+    }
+
+
+    public void LogUser()
+    {
+        Utilisateur utilisateur = new Utilisateur() { Login = UserLogin, MotDePasse = UserMotDePasse };
+        EntityFrameworkStorage store = new EntityFrameworkStorage(calendrierContext);
+
+        if (CreateAccount)
+        {
+            if (store.CheckLoginAvailability(utilisateur))
+            {
+                store.CréerUtilisateur(utilisateur);
+
+                AfficheErreurConnexion(false);
+                AfficheErreurCreation(false);
+            }
+            //retours interface création compte KO
+            else
+            {
+                AfficheErreurConnexion(false);
+                AfficheErreurCreation(true);
+            }
+        }
+        else
+        {
+            if (store.LogIn(utilisateur.Login, utilisateur.MotDePasse))
+            {
+                EtatCalendrier.CurrentUser = store.GetUtilisateur(utilisateur.Login, utilisateur.MotDePasse);
+                AfficheErreurConnexion(false);
+                AfficheErreurCreation(false);
+                MyNavigationManager.NavigateTo("calendrier");
+            }
+            //retours interface login KO plus propose créer compte
+            else
+            {
+                AfficheErreurCreation(false);
+                AfficheErreurConnexion(true);
+            }
+        }
+    }
+
+    private void AfficheErreurConnexion(bool affiche)
+    {
+        erreurConnexion = affiche;
+        formInvalid = (affiche)?"is-invalid":String.Empty;
+    }
+
+    private void AfficheErreurCreation(bool affiche)
+    {
+        erreurCreationCompte = affiche;
+        formInvalid = (affiche)?"is-invalid":String.Empty;
+    }
+}
