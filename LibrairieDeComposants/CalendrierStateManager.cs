@@ -23,6 +23,8 @@ namespace LibrairieDeComposants
         private DateTime _dateReference = DateTime.Now;
         private JourModel _jourSelectionne;
         private Utilisateur _currentUser;
+        private NoteViewModel _noteVm;
+
 
         #endregion
 
@@ -86,6 +88,19 @@ namespace LibrairieDeComposants
                 return _calendrier;
             }
             set { _calendrier = value; }
+        }
+
+        public NoteViewModel NoteVm 
+        { 
+            get 
+            { 
+                if(_noteVm == null)
+                {
+                    _noteVm = new NoteViewModel();
+                }
+                return _noteVm;
+            } 
+            set { _noteVm = value; }
         }
 
         #endregion
@@ -179,6 +194,11 @@ namespace LibrairieDeComposants
                     GroupeID = note.Groupe
                 });
             }
+        }
+
+        public void DefinirGroupeParDefault()
+        {
+            NoteVm.GroupeID = CurrentUser.UtilisateurGroupe.ElementAt(0).GroupeID;
         }
 
         #endregion

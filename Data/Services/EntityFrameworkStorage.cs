@@ -102,7 +102,22 @@ namespace Data.Services
 
                 utilisateur.MotDePasse = GetHash(sha256Hash, utilisateur.MotDePasse);
             }
+
             _context.Utilisateur.Add(utilisateur);
+            _context.SaveChanges();
+
+
+            if (utilisateur.UtilisateurGroupe == null)// || utilisateur.UtilisateurGroupe.ElementAt(0) == null)
+            {
+                UtilisateurGroupe utilisateurGroupe = new UtilisateurGroupe() { GroupeID = 1, UtilisateurID = utilisateur.UtilisateurID };
+                utilisateur.UtilisateurGroupe = new List<UtilisateurGroupe>();
+                utilisateur.UtilisateurGroupe.Add(utilisateurGroupe);
+            }
+            else if(utilisateur.UtilisateurGroupe.ElementAt(0) == null)
+            {
+                UtilisateurGroupe utilisateurGroupe = new UtilisateurGroupe() { GroupeID = 1, UtilisateurID = utilisateur.UtilisateurID };
+                utilisateur.UtilisateurGroupe.Add(utilisateurGroupe);
+            }
             _context.SaveChanges();
         }
 

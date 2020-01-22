@@ -92,6 +92,7 @@
             if (store.LogIn(utilisateur.Login, utilisateur.MotDePasse))
             {
                 EtatCalendrier.CurrentUser = store.GetUtilisateur(utilisateur.Login, utilisateur.MotDePasse);
+                EtatCalendrier.DefinirGroupeParDefault();
                 AfficheErreurConnexion(false);
                 AfficheErreurCreation(false);
                 MyNavigationManager.NavigateTo("calendrier");

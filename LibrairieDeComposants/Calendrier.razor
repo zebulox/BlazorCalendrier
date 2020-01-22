@@ -61,7 +61,7 @@
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         Ecrire une note pour :
                                     </button>
-                                    <select @bind="noteVm.GroupeID">
+                                    <select @bind="EtatCalendrier.NoteVm.GroupeID">
                                         @if (EtatCalendrier.CurrentUser.UtilisateurGroupe != null)
                                         {
                                             @foreach (UtilisateurGroupe Ugroupe in EtatCalendrier.CurrentUser.UtilisateurGroupe)
@@ -81,7 +81,7 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="exampleFormControlTextarea1"> <span class="material-icons">edit</span> Note :</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind="noteVm.Note"></textarea>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind="EtatCalendrier.NoteVm.Note"></textarea>
                                     </div>
                                 </div>
 
@@ -119,7 +119,7 @@
                                                     </div>
                                                     <div class="card-body">
                                                         <p class="card-text">@(note.Note)</p>
-                                                        <a href="#">@(note.DateCreationNote.ToString(EtatCalendrier.ShortdateFormat, EtatCalendrier.Culture))</a>
+                                                        <a>@(note.DateCreationNote.ToString(EtatCalendrier.ShortdateFormat, EtatCalendrier.Culture))</a>
                                                     </div>
                                                     @if (EtatCalendrier.CurrentUser.Login == note.CreateurNom)
                                                     {
@@ -156,7 +156,6 @@
 @code {
 
     private IEnumerable<KeyValuePair<int, string>> mois;
-    private NoteViewModel noteVm;
 
 
 
@@ -167,12 +166,7 @@
 
         var dateFormatInfo = EtatCalendrier.Culture.DateTimeFormat;
         mois = Enumerable.Range(1, 12).Select(i => new KeyValuePair<int, string>(i, dateFormatInfo.GetMonthName(i)));
-
-        noteVm = new NoteViewModel();
-
-        //Dangereux
-        noteVm.GroupeID = EtatCalendrier.CurrentUser.UtilisateurGroupe.ElementAt(0).GroupeID;
-
+        
         await base.OnParametersSetAsync();
     }
 
@@ -196,17 +190,21 @@
     {
         if (EtatCalendrier.CurrentUser != null)
         {
-            noteVm.Date = EtatCalendrier.JourSelectionne.Jour;
-            noteVm.CreateurNom = EtatCalendrier.CurrentUser.Login;
-            noteVm.CreateurAvatar = EtatCalendrier.CurrentUser.ProfilImage;
-            noteVm.DateCreationNote = DateTime.Now;
-            //mise à jour de l'interface
-            EtatCalendrier.JourSelectionne.AjouterNote(noteVm);
-            //mise à jour du store
-            EtatCalendrier.EnregistrerNote(noteVm);
-
             JSRuntime.InvokeVoidAsync("fermerModal");
-            noteVm = new NoteViewModel();
+
+            EtatCalendrier.NoteVm.Date = EtatCalendrier.JourSelectionne.Jour;
+            EtatCalendrier.NoteVm.CreateurNom = EtatCalendrier.CurrentUser.Login;
+            EtatCalendrier.NoteVm.CreateurAvatar = EtatCalendrier.CurrentUser.ProfilImage;
+            EtatCalendrier.NoteVm.DateCreationNote = DateTime.Now;
+            //mise à jour de l'interface
+            EtatCalendrier.JourSelectionne.AjouterNote(EtatCalendrier.NoteVm);
+            //mise à jour du store
+            EtatCalendrier.EnregistrerNote(EtatCalendrier.NoteVm);
+
+            //on créer une nouvelle note vierge
+            EtatCalendrier.NoteVm = new NoteViewModel();
+            EtatCalendrier.DefinirGroupeParDefault();
+
         }
     }
 
