@@ -1,6 +1,6 @@
 ﻿@using Microsoft.JSInterop;
 @using Data.Dal
-@*@using Data.Models*@
+@using Data.Models
 
 @inject IJSRuntime JSRuntime
 @inject CalendrierStateManager EtatCalendrier
@@ -61,17 +61,20 @@
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         Ecrire une note pour :
                                     </button>
-                                </h5>
-                                @*<select @bind="noteVm.GroupeID">
-                                    @if (EtatCalendrier.CurrentUser.UtilisateurGroupe != null)
-                                    {
-                                        @foreach (UtilisateurGroupe Ugroupe in EtatCalendrier.CurrentUser.UtilisateurGroupe)
+                                    <select @bind="noteVm.GroupeID">
+                                        @if (EtatCalendrier.CurrentUser.UtilisateurGroupe != null)
                                         {
-                                    <option value="@Ugroupe.Groupe.GroupeID">@Ugroupe.Groupe.Nom</option>
+                                            @foreach (UtilisateurGroupe Ugroupe in EtatCalendrier.CurrentUser.UtilisateurGroupe)
+                                            {
+                                                <option value="@Ugroupe.Groupe.GroupeID">@Ugroupe.Groupe.Nom</option>
+                                            }
                                         }
-                                    }
-                                    else{<p>EtatCalendrier.CurrentUser.UtilisateurGroupe null</p>}
-                                </select>*@
+                                        else
+                                        {
+                                            <p>EtatCalendrier.CurrentUser.UtilisateurGroupe null</p>
+}
+                                    </select>
+                                </h5>
                             </div>
 
                             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
@@ -166,6 +169,9 @@
         mois = Enumerable.Range(1, 12).Select(i => new KeyValuePair<int, string>(i, dateFormatInfo.GetMonthName(i)));
 
         noteVm = new NoteViewModel();
+
+        //Dangereux
+        noteVm.GroupeID = EtatCalendrier.CurrentUser.UtilisateurGroupe.ElementAt(0).GroupeID;
 
         await base.OnParametersSetAsync();
     }

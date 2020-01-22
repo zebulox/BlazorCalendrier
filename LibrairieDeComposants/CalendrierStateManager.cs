@@ -139,7 +139,8 @@ namespace LibrairieDeComposants
             _dataservice.EnregistrerNoteAsync(new Note() { Date = noteViewModel.Date, 
                                                            Message = noteViewModel.Note, 
                                                            UtilsateurCreateur = CurrentUser, 
-                                                           DateCreationNote = noteViewModel.DateCreationNote });
+                                                           DateCreationNote = noteViewModel.DateCreationNote,
+                                                           Groupe = noteViewModel.GroupeID});
         }
 
         public void EffacerNote(NoteViewModel noteVm)

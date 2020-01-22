@@ -118,7 +118,9 @@ namespace Data.Services
             {
                 hash = GetHash(sha256Hash, password);
             }
-            return _context.Utilisateur.FirstOrDefault(u => u.Login == login && u.MotDePasse == hash);
+            return _context.Utilisateur.Include(u => u.UtilisateurGroupe)
+                                       .ThenInclude(UtilisateurGroupe => UtilisateurGroupe.Groupe)
+                                       .FirstOrDefault(u => u.Login == login && u.MotDePasse == hash);
         }
 
         public void SaveUserPicture(Utilisateur user)
