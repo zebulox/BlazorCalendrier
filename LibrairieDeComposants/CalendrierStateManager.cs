@@ -168,39 +168,15 @@ namespace LibrairieDeComposants
 
         }
 
-        public void ChargerNotes()
-        {
-            DateTime dateDebut = Calendrier.Semaines.ElementAt(0).Jours.ElementAt(0).Jour;
-            int nbjours = 0;
-            foreach (SemaineModel semaine in Calendrier.Semaines)
-            {
-                nbjours += semaine.Jours.Count();
-            }
-
-            DateTime dateFin = dateDebut.AddDays(nbjours);
-            List<Note> notes = _dataservice.ChargerNotesAsync(dateDebut, dateFin).Result;
-
-            foreach (Note note in notes)
-            {
-                JourModel jour = TrouverJourDansCalendrier(note.Date);
-                jour.Notes.Add(new NoteViewModel()
-                {
-                    Note = note.Message,
-                    Date = jour.Jour,
-                    CreateurNom = note.UtilsateurCreateur.Login,
-                    CreateurAvatar = note.UtilsateurCreateur.ProfilImage,
-                    DateCreationNote = note.DateCreationNote,
-                    NoteId = note.NoteID,
-                    GroupeID = note.Groupe
-                });
-            }
-        }
-
         public void DefinirGroupeParDefault()
         {
             NoteVm.GroupeID = CurrentUser.UtilisateurGroupe.ElementAt(0).GroupeID;
         }
 
+        public void CreerGroupe(String nomGroupe)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region private functions
@@ -233,6 +209,35 @@ namespace LibrairieDeComposants
             }
             //une fois le calendrier modélisé on charge les messages
             ChargerNotes();
+        }
+
+        private void ChargerNotes()
+        {
+            DateTime dateDebut = Calendrier.Semaines.ElementAt(0).Jours.ElementAt(0).Jour;
+            int nbjours = 0;
+            foreach (SemaineModel semaine in Calendrier.Semaines)
+            {
+                nbjours += semaine.Jours.Count();
+            }
+
+            DateTime dateFin = dateDebut.AddDays(nbjours);
+            List<Note> notes = _dataservice.ChargerNotesAsync(dateDebut, dateFin).Result;
+
+            
+            foreach (Note note in notes)
+            {
+                JourModel jour = TrouverJourDansCalendrier(note.Date);
+                jour.Notes.Add(new NoteViewModel()
+                {
+                    Note = note.Message,
+                    Date = jour.Jour,
+                    CreateurNom = note.UtilsateurCreateur.Login,
+                    CreateurAvatar = note.UtilsateurCreateur.ProfilImage,
+                    DateCreationNote = note.DateCreationNote,
+                    NoteId = note.NoteID,
+                    GroupeID = note.Groupe
+                });
+            }
         }
 
         private JourModel TrouverJourDansCalendrier(DateTime date)

@@ -7,8 +7,10 @@
 @inject CalendrierStateManager EtatCalendrier
 
 
-
-<Calendrier></Calendrier>
+@if (EtatCalendrier.CurrentUser != null)
+{
+    <Calendrier></Calendrier>
+}
 
 
 @code {
@@ -22,6 +24,7 @@
 
     //public String FormatDate = "MMM-d-yy ";
     //public String NomCulture = "en-US";
+
 
     protected override async Task OnParametersSetAsync()
     {

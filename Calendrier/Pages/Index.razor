@@ -1,5 +1,178 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+    <div class="container">
+        <div class="row">
+            <div class="card text-center">
+                @*<div class="card-header">
+                    Featured
+                </div>*@
+                <div class="card-body">
+                    <h5 class="card-title">Bienvenue</h5>
+                    <p class="card-text">
+                        Bienvenue sur l'application de notes collaboratives et de réservations de
+                        <img src="/Images/Icons/various/croissant.svg" style="width: 1em;">
+                        <img src="/Images/Icons/various/croissant.svg" style="width: 1em;">
+                        <img src="/Images/Icons/various/croissant.svg" style="width: 1em;">
+                        !
+                    </p>
+                    <p>
+                        <img  class="img-fluid" src="/Images/Captures/Calendrier.JPG">
+                    </p>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="login" class="btn btn-primary">
+                        Se connecter
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @*<p>
+                        <i class="material-icons">
+                            expand_more
+                        </i>
+            <img src="/Images/Captures/Calendrier.JPG" style="width: 50vw;">
+        </p>*@
+
+        <div class="row">
+            <div id="accordion">
+
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Créer un compte
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="row"><p>Pour créer un compte rendez vous sur la page <a href="login"> de connexion</a>.</p></div>
+
+                            <br />
+                            <div class="row"><img class="img-fluid mx-auto d-block" src="/Images/Captures/Se_Connecter.JPG" /></div>
+                            <br />
+
+                            <div class="row">
+                                <p>
+                                    - Renseignez votre login, celui ci sera associé à toutes vos notes et les autres utilisateurs vous retrouveront avec ce nom.
+                                </p>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <p>
+                                    - Choisissez un mot de passe pour pouvoir accéder à votre compte, ce dernier doit rester secret.
+                                </p>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <p>- Séléctionner l'option : </p>
+                                <div class="form-check ml-3">
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
+                                    <label class="form-check-label" for="exampleCheck1">Créer un Compte</label>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <p>
+                                    - Pour finaliser l'inscription cliquer sur  : <button type="submit" class="btn btn-secondary">Créer un compte</button>
+                                </p>
+                            </div>
+                            <br />
+
+
+                            <hr />
+
+
+                            <div class="row justify-content-md-center">
+                                <div class="col-md-auto">
+                                    <h5 class="text-danger">Catastrophe j'ai une erreur !!!</h5>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <p>
+                                    Il peut arriver que vous ne puissiez pas créer votre compte, dans ce cas un message d' erreur apparaît.
+                                </p>
+                            </div>
+                            <br />
+
+                            <div class="row justify-content-md-center">
+                                <div class="col-md-auto">
+                                    <div class="form-group">
+                                        <label for="loginInput">Login</label>
+                                        <input type="text" class="form-control is-invalid" id="loginInput" placeholder="Entrer Login">
+                                        <div class="invalid-feedback">
+                                            Ce Login est déja pris
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <p>
+                                    Ce mesage indique que le login que vous avez choisis est déja utilisé par une autre personne.
+                                    Dans ce cas il vous faut choisir un autre login et répéter les étapes de création d'un compte.
+                                </p>
+                            </div>
+                            <br />
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Se connecter
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Utiliser le Calendrier
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Editer les inforamtions de mon compte
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

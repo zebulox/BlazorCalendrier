@@ -186,7 +186,12 @@ app {
         background-color: dimgray;
     }
 
+    .mouse-cursor:hover {
+        cursor: pointer;
+    }
+
     /*DEV MODE*/
+    /*
     html {
         background-color: whitesmoke !important;
         filter: invert(0.9);
@@ -195,4 +200,23 @@ app {
     img[src*=".svg"] {
         filter: invert(1);
     }
+    a, .btn-link {
+        color: #fd7e14;
+    }
+
+    .auteur-pseudo {
+        color: #FF003E;
+    }
+
+    .text-autosize {
+        font-size: 12px; 
+        font-size: 1.6vm; 
+        font-size: 1.2vmin;
+    }
+
+    .sidebar {
+        background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%) !important;
+    }
+        */
+
 }

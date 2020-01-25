@@ -69,9 +69,6 @@
                                                 <option value="@Ugroupe.Groupe.GroupeID">@Ugroupe.Groupe.Nom</option>
                                             }
                                         }
-                                        else
-                                        {
-                                            <p>EtatCalendrier.CurrentUser.UtilisateurGroupe null</p>
 }
                                     </select>
                                 </h5>
@@ -83,16 +80,16 @@
                                         <label for="exampleFormControlTextarea1"> <span class="material-icons">edit</span> Note :</label>
                                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind="EtatCalendrier.NoteVm.Note"></textarea>
                                     </div>
+                                    @if (EtatCalendrier.CurrentUser != null)
+                                    {
+                                        <button type="button" class="btn btn-primary float-right mb-5" @onclick="AjouterNote"><span class="material-icons">note_add</span></button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-dark float-right mb-5" data-toggle="tooltip" data-placement="top" title="Vous devez vous connecter avant de créer une note" disabled>Ajouter : <span class="material-icons">note_add</span></button>
+                                    }
                                 </div>
 
-                                @if (EtatCalendrier.CurrentUser != null)
-                                {
-                                    <button type="button" class="btn btn-dark float-right mb-5" @onclick="AjouterNote">Ajouter : <span class="material-icons">done_outline</span></button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-dark float-right mb-5" data-toggle="tooltip" data-placement="top" title="Vous devez vous connecter avant de créer une note" disabled>Ajouter : <span class="material-icons">done_outline</span></button>
-                                }
 
                             </div>
                         </div>
@@ -111,25 +108,40 @@
                                             @foreach (var note in EtatCalendrier.JourSelectionne.Notes)
                                             {
 
-                                                <div class="card" style="width: 100%;">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title">
-                                                            <img src="@(note.CreateurAvatar)" alt="Card image cap"> (@(note.CreateurNom))
-                                                        </h5>
-                                                    </div>
-                                                    <div class="card-body">
+                                            <div class="card" style="width: 100%;">
+                                                <div class="card-header">
+                                                    <h5 class="card-title text-autosize">
+                                                        <img src="@(note.CreateurAvatar)" alt="Card image cap"> <b> : </b> <b class="auteur-pseudo">@(note.CreateurNom)</b>
+                                                    </h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    @if (note.Note.Contains("CROISSANT"))
+                                                    {
+                                                        List<String> splittedNote = note.Note.Split(new String[] { "CROISSANT" }, StringSplitOptions.None).ToList();
+                                                        splittedNote.RemoveAt(splittedNote.Count - 1);
+
+                                                        foreach (String fragment in splittedNote)
+                                                        {
+                                                            <p class="card-text">@(fragment)</p>
+                                                            <img src="/Images/Icons/various/croissant.svg" style="width: 100%;">
+                                                        }
+                                                    }
+                                                    else
+                                                    {
                                                         <p class="card-text">@(note.Note)</p>
-                                                        <a>@(note.DateCreationNote.ToString(EtatCalendrier.ShortdateFormat, EtatCalendrier.Culture))</a>
-                                                    </div>
+                                                    }
+                                                    <a>@(note.DateCreationNote.ToString(EtatCalendrier.ShortdateFormat, EtatCalendrier.Culture))</a>
+                                                </div>
+
+                                                <div class="card-footer">
                                                     @if (EtatCalendrier.CurrentUser.Login == note.CreateurNom)
                                                     {
-                                                <div class="card-footer">
-                                                    <button type="button" class="btn btn-sm btn-dark float-right mb-2" @onclick="@(e => EffacerNote(note))">
-                                                        <span class="material-icons">delete</span>
-                                                    </button>
-                                                </div>
+                                                        <button type="button" class="btn btn-sm btn-danger float-right mb-2" @onclick="@(e => EffacerNote(note))">
+                                                            <span class="material-icons">delete</span>
+                                                        </button>
                                                     }
                                                 </div>
+                                            </div>
                                             }
                                         </div>
 

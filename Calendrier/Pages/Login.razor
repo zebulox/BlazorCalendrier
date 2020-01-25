@@ -41,7 +41,14 @@
                 <input type="checkbox" class="form-check-input" id="exampleCheck1" @bind="CreateAccount">
                 <label class="form-check-label" for="exampleCheck1">Créer un Compte</label>
             </div>
-            <button type="submit" class="btn btn-secondary" @onclick="LogUser">Se connecter</button>
+            @if (CreateAccount)
+            {
+                <button type="submit" class="btn btn-secondary" @onclick="CreateUser">Créer un compte</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-secondary" @onclick="LogUser">Se connecter</button>
+            }
         </div>
     </div>
 </div>
@@ -49,10 +56,21 @@
 @code {
     public String UserLogin { get; set; }
     public String UserMotDePasse { get; set; }
-    public bool CreateAccount { get; set; }
+    public bool CreateAccount
+    {
+        get { return createAccount; }
+        set 
+        {
+            createAccount = value;
+            CleanErrors();
+        }
+
+    }
+
 
     //is-invalid
     private String formInvalid;
+    private bool createAccount;
     private bool erreurConnexion;
     private bool erreurCreationCompte;
 
@@ -71,38 +89,39 @@
         Utilisateur utilisateur = new Utilisateur() { Login = UserLogin, MotDePasse = UserMotDePasse };
         EntityFrameworkStorage store = new EntityFrameworkStorage(calendrierContext);
 
-        if (CreateAccount)
+        if (store.LogIn(utilisateur.Login, utilisateur.MotDePasse))
         {
-            if (store.CheckLoginAvailability(utilisateur))
-            {
-                store.CréerUtilisateur(utilisateur);
-
-                AfficheErreurConnexion(false);
-                AfficheErreurCreation(false);
-            }
-            //retours interface création compte KO
-            else
-            {
-                AfficheErreurConnexion(false);
-                AfficheErreurCreation(true);
-            }
+            EtatCalendrier.CurrentUser = store.GetUtilisateur(utilisateur.Login, utilisateur.MotDePasse);
+            EtatCalendrier.DefinirGroupeParDefault();
+            AfficheErreurConnexion(false);
+            AfficheErreurCreation(false);
+            MyNavigationManager.NavigateTo("calendrier");
         }
+        //retours interface login KO plus propose créer compte
         else
         {
-            if (store.LogIn(utilisateur.Login, utilisateur.MotDePasse))
-            {
-                EtatCalendrier.CurrentUser = store.GetUtilisateur(utilisateur.Login, utilisateur.MotDePasse);
-                EtatCalendrier.DefinirGroupeParDefault();
-                AfficheErreurConnexion(false);
-                AfficheErreurCreation(false);
-                MyNavigationManager.NavigateTo("calendrier");
-            }
-            //retours interface login KO plus propose créer compte
-            else
-            {
-                AfficheErreurCreation(false);
-                AfficheErreurConnexion(true);
-            }
+            AfficheErreurCreation(false);
+            AfficheErreurConnexion(true);
+        }
+
+    }
+
+    public void CreateUser()
+    {
+        Utilisateur utilisateur = new Utilisateur() { Login = UserLogin, MotDePasse = UserMotDePasse };
+        EntityFrameworkStorage store = new EntityFrameworkStorage(calendrierContext);
+        if (store.CheckLoginAvailability(utilisateur))
+        {
+            store.CréerUtilisateur(utilisateur);
+
+            AfficheErreurConnexion(false);
+            AfficheErreurCreation(false);
+        }
+        //retours interface création compte KO
+        else
+        {
+            AfficheErreurConnexion(false);
+            AfficheErreurCreation(true);
         }
     }
 
@@ -116,5 +135,11 @@
     {
         erreurCreationCompte = affiche;
         formInvalid = (affiche)?"is-invalid":String.Empty;
+    }
+
+    public void CleanErrors()
+    {
+        AfficheErreurConnexion(false);
+        AfficheErreurCreation(false);
     }
 }

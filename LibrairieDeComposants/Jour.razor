@@ -9,17 +9,11 @@
         </div>
 
         <div class="col-sm-12 h-75">
-            @*@foreach (var note in jour.Notes)
-        {
-            <div class="col-sm-12">
-                <p class="note">@(note.Note)</p>
-            </div>
-        }*@
             @if(jour.Notes.Count > 0)
             {
-                <div class="col-sm-12">
-                    <p class="note">Notes :@(jour.Notes.Count)</p>
-                </div>
+            <div class="col-sm-12 text-center mouse-cursor">
+                <p class=""> @(jour.Notes.Count) <span class="material-icons" style="transform: scaleX(-1);color: #007bff;">mode_comment</span></p>
+            </div>
             }
 
             <span class="align-bas text-sm-right">@jour.Jour.ToString(EtatCalendrier.DateFormat, EtatCalendrier.Culture)</span>
@@ -37,6 +31,15 @@
     {
         jour.CssJourClass = (EtatCalendrier.MoisSelectione == jour.Jour.Month) ? "jour" : "jour-dark";
         jour.CssBadgeClass = (EtatCalendrier.MoisSelectione == jour.Jour.Month) ? "badge-dark" : "badge-secondary";
+
+        //init le jours courant
+        if (DateTime.Now.Day == jour.Jour.Day
+         && DateTime.Now.Month == jour.Jour.Month
+         && DateTime.Now.Year == jour.Jour.Year)
+        {
+            jour.CssJourClass += " text-info";
+            jour.CssBadgeClass = "badge-info";
+        }
 
         await base.OnParametersSetAsync();
     }
